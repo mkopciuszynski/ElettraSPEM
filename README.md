@@ -10,23 +10,21 @@ On MS Windows User Procedures are stored in (for example):
 ```
 C:\Users\user.name\Documents\WaveMetrics\Igor Pro 9 User Files\User Procedures
 ```
-3. Create an alias of Menu_SPEM.ipf file and paste it in Igor Procedures directory (for example):
+3. Create an alias/shortcut of Menu_SPEM.ipf file and paste it in Igor Procedures directory (for example):
 ```
 C:\Users\user.name\Documents\WaveMetrics\Igor Pro 9 User Files\Igor Procedures
 ```
 4. After launching Igor Pro the SPEM procedures could be loaded using "Menu -> Data -> Load SPEM"
 
-<sub>
-*****HDF5 library on Igor Pro**
-ElettraSPEM procedures require hdf5 libraries. On Igor Pro 8 those libraries should be already present or if no, follow those instructions:
+### HDF5 library on Igor Pro
+ElettraSPEM procedures require hdf5 libraries. On Igor Pro 8 those libraries should be already present or if no, follow instuctions shown bellow:
+1. Make an alias/shortcut for the following file: igor pro folder\more extensions\file loaders\hdf5.xop. 
+2. Move the alias or shortcut into the "igor pro folder\igor extensions" folder.
+3. Make an alias/shortcut for the following file: igor pro folder\wavemetrics procedures\file input output\hdf5 browser.ipf. 
+4. Move the alias or shortcut into the "igor pro folder\igor procedures" folder. 
 
-Install hdf5 library with hdf5 browser on Igor Pro
-1. make an alias (mac os x ) or shortcut (windows ) for the following file: igor pro folder\more extensions\file loaders\hdf5.xop. move the alias or shortcut into the "igor pro folder\igor extensions" folder.
-2. make an alias (mac os x ) or shortcut (windows ) for the following file: igor pro folder\wavemetrics procedures\file input output\hdf5 browser.ipf. move the alias or shortcut into the "igor pro folder\igor procedures" folder. 
+This activates igor procedures that implement an hdf5 browser and add a "new hdf5 browser" menu item in the data->load waves menu.
 
-this activates igor procedures that implement an hdf5 browser and add a "new hdf5 browser" menu item in the data->load waves menu.
-restart igor pro.
-</sub>
 # Basic usage of SPEM routines
 
 ## Load procedures
