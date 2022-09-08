@@ -1,9 +1,7 @@
 # ElettraSPEM
 Elettra Spectromicroscopy Igor Pro routines
 
-
 ## Installation
-
 1. Download this repository as a zip package:
     - Code -> Download ZIP
 2. Unpack it into the User Procedures directory.
@@ -18,7 +16,7 @@ C:\Users\user.name\Documents\WaveMetrics\Igor Pro 9 User Files\Igor Procedures
 4. After launching Igor Pro the SPEM procedures could be loaded using "Menu -> Data -> Load SPEM"
 
 ### HDF5 library on Igor Pro
-ElettraSPEM procedures require hdf5 libraries. On Igor Pro 8 those libraries should be already present or if no, follow instuctions shown at the end of this README:
+ElettraSPEM procedures require hdf5 libraries. On Igor Pro 8 those libraries should be already present or if no, follow the instruction included at at the end of this README file.
 
 ## Basic usage of SPEM routines
 
@@ -63,7 +61,7 @@ The last browser (3D) might be used also to browse all ares of a region scan (af
 #### ARPES data normalization / detector correction
 Select 2d or 3d arpes data and press norm. button. New panel "data normalization" is created. Several options are available.
 
-##### Integrl normalization
+#### Integral normalization
 First tab allows to adjust the integral normalization. 
 It is calculated for each nu/p emission angle separately as follows:
 
@@ -78,19 +76,19 @@ Where:
 - `integral norm (%)` - the "power" of integral normalization, 0% means no correction.
 
 
-##### Correct the detector inhomogeneity
+#### Correct the detector inhomogeneity
 (Second tab in Data normalization panel.
 First select the wave that will be used for correction. Two types of normalization are available: by an image or by 1d profile.
 In first case the whole data wave is divided by the detector background wave image. This applies best to snap measurements.
 Second type (division by 1d profile) could be applied even for swep scans in wider range of kinetic energy. The detector background image is first converted to 1d profile (summation over energies) and then each line of data is divided by the profile.
 
-**Warning!**
+*****Warning!**
 If during the beamtime the detector active area was changed (different number of energy/angular channels) it might happen that data measured for detector inhomogeneity correction will have slightly different dimensions size. In such a case the user is asked to confirm the reshape procedure of detector correction wave.
 
 Before the normalization panel is created the data are copied to separate data directory and in case of a "revert" button is pressed the data are restored.
 
 
-### Appedix HDF5 libraries on Igor Pro
+### Appendix HDF5 libraries on Igor Pro
 1. Make an alias/shortcut for the following file: igor pro folder\more extensions\file loaders\hdf5.xop. 
 2. Move the alias or shortcut into the "igor pro folder\igor extensions" folder.
 3. Make an alias/shortcut for the following file: igor pro folder\wavemetrics procedures\file input output\hdf5 browser.ipf. 
