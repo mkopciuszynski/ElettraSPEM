@@ -64,7 +64,7 @@ proc SPEM_Init()
 	SetDataFolder ksDataFolder
 	// Load color map from matplotlib tables
 	//LoadWave/O/P = Igor ":Color Tables:Matplotlib:viridis.ibw"
-	LoadWave/O/P = IgorUserFiles ":User Procedures:Load_SPEM:viridis.ibw"
+	LoadWave/O/P = IgorUserFiles ":User Procedures:ElettraSPEM:viridis.ibw"
 
 	print "======================================"
 	print "The SPEM routines loaded successfully"
