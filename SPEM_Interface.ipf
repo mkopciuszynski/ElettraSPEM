@@ -251,7 +251,7 @@ function eventShowInfo(ctrlName): ButtonControl
 	Print(atts[%$dataName][%$"Acquisition Type"])
 	Print("P/T: "+atts[%$dataName][%$"aP"]+"° / "+atts[%$dataName][%$"aT"]+"°\r")
 	Print("x/y/x: \t\t"+atts[%$dataName][%$"X"]+" / "+atts[%$dataName][%$"Y"]+" / "+atts[%$dataName][%$"Z"])
-	Print("Ek (ev): \t\t"+atts[%$dataName][%$"Offset 0"])
+	Print("Ek start (ev): \t\t"+atts[%$dataName][%$"Offset 0"])
 	Print("Pass Energy (ev): \t"+atts[%$dataName][%$"PE"])
 	Print("Dwell time (s): \t"+atts[%$dataName][%$"Dwell"])
 	Print("Scans: \t\t"+atts[%$dataName][%$"Scans"])
@@ -1072,7 +1072,9 @@ Function addLegend(dataName)
 			slegend = "\Z08P/T = "
 			slegend += num2str(round(str2num(atts[%$dataName][%$ksaP])*10)*0.1)+"° / "
 			slegend += num2str(round(str2num(atts[%$dataName][%$ksaT])*10)*0.1)+"° \rEk = "
-			slegend += num2str(round(str2num(atts[%$dataName][%$ksOffset0])*10)*0.1)+" eV"
+			slegend += num2str(round((	 str2num(atts[%$dataName][%$ksOffset0])  \
+												+str2num(atts[%$dataName][%$ksDelta0])   \
+												*dimSize($dataName,0)*0.5)*10)*0.1)+" eV"
 			break
 		case ksImage4D:
 			slegend = "\Z08P/T = "

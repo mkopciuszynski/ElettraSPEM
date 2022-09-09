@@ -94,5 +94,5 @@ Before the normalization panel is created the data are copied to separate data d
 3. Make an alias/shortcut for the following file: igor pro folder\wavemetrics procedures\file input output\hdf5 browser.ipf. 
 4. Move the alias or shortcut into the "igor pro folder\igor procedures" folder. 
 
-This activates igor procedures that implement an hdf5 browser and add a "new hdf5 browser" menu item in the data->load waves menu.
+This activates Igor procedures that implement an hdf5 browser and add a "new hdf5 browser" menu item in the data->load waves menu.
 

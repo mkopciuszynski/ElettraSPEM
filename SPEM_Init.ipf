@@ -9,14 +9,12 @@
 
 // SPEM init file
 // Load the procedures and setup the environment
-
 #include "SPEM_Interface" // Procedures responsible for user interface
 #include "SPEM_LoadData"  // Loading the data
 #include "SPEM_PlotData"  // Prepare plots
 #include "SPEM_ProcessData" // Process the data
 #include "SPEM_Kspace"		// Transform maps to k space
 #include  <All IP Procedures> // Link to standard image processing tool (Igor)
-
 ///////////////////////////////
 // String constants
 ///////////////////////////////
@@ -41,7 +39,7 @@ StrConstant ksImage="Image",ksPolar="Polar Scan",ksFocus="Focus Scan",ksSpectrum
 
 
 /////////////////////////////////////
-// Default color map for ARPES data
+// Set the default color map for ARPES data
 StrConstant ksColorMap = "viridis"
 
 
@@ -59,15 +57,17 @@ proc SPEM_Init()
 	variable/g gef74 = 70.8
 	variable/g gef27 = 23.7
 	variable/g gT0 = 0
-	variable/g gP90 = 90
+	variable/g gP90 = 88
 
 	SetDataFolder ksDataFolder
 	// Load color map from matplotlib tables
 	//LoadWave/O/P = Igor ":Color Tables:Matplotlib:viridis.ibw"
 	LoadWave/O/P = IgorUserFiles ":User Procedures:ElettraSPEM:viridis.ibw"
 
-	print "======================================"
+	print "==========================================="
 	print "The SPEM routines loaded successfully"
-	print "======================================"
-	//print "Version: " + version
+	print "==========================================="
+	print "The latest version and instructions could be found here:"
+	print "https://github.com/mkopciuszynski/ElettraSPEM"
+	print "==========================================="
 end
