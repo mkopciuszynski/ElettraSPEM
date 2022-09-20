@@ -1,7 +1,15 @@
 # ElettraSPEM
 Elettra Spectromicroscopy Igor Pro routines
 
+## Requiements
+Igor Pro from WaveMetrics. Version 8.0 or newer (tested on 64-bit version of Igor Pro 8.04 and 9.01).
+
+For older version of Igor Pro see our old routines: 
+
+https://www.elettra.eu/lightsources/elettra/elettra-beamlines/spectro-microscopy/info-for-users/page-3.html?showall=
+
 ## Installation
+
 1. Download this repository as a zip package:
     - Code -> Download ZIP
 2. Unpack it into the User Procedures directory.
@@ -45,9 +53,9 @@ To load this kind of data press F3 or select: SPEM -> Load sequence of data.
 
 ### Browse loaded data
 If some data were already loaded to Igor but the graph was closed it could be recreated using:
-    - SPEM -> browse loaded spectroimages
-    - SPEM -> browse loaded 2d maps
-    - SPEM -> browse loaded 3d maps
+- SPEM -> browse loaded spectroimages
+- SPEM -> browse loaded 2d maps
+- SPEM -> browse loaded 3d maps
 The last browser (3D) might be used also to browse all ares of a region scan (after the data are loaded only the last line is snown). 
 
 ### Additional features depending on data type
