@@ -13,7 +13,7 @@ Function Calc2ndDiff(dataName)
 	DeletePoints 0,5, srcData
 	DeletePoints DimSize(srcData,0)-5,5, srcData
 	//DeletePoints 0,4, srcData
-	
+
 End
 
 
@@ -43,88 +43,66 @@ Function ReduceDim(dataName,Dim,dataSumName,[Start,Finish])
 	String dataName,dataSumName
 	Variable Dim,Start,Finish
 	Variable i,j,k,m
-
-	if (Finish==0)
-		Finish = DimSize($dataName,dim)
+	Variable wholeRange
+	// Check if optional parameters were provided, otherwise the whole range will be used
+	if( ParamIsDefault(Start) && ParamIsDefault(Finish) )
+		wholeRange = 1
 	endif
+
 	Variable dataDim=WaveDims($dataName)
+	Make/O dimList = {0,1,2,3}
+
 	if(WaveExists($dataName) && strlen(dataSumName) && (dataDim>1) && (Dim<dataDim))
 		WAVE srcData=$dataName
+		// Make a copy of src Data for dimension trimming
+		Duplicate /O srcData, srcCopy
 		switch (dataDim)// data dimension
 			case 2:
-				switch(dim)
-					case 0:
-						Make/O/D/N=(DimSize(srcData,1)), $dataSumName
-						Make/O/N=(DimSize(srcData,0)) temp1d
-						WAVE dstData=$dataSumName
-						CopyWaveAttributes(dataName,1,dataSumName,0)
-						for(i=0;i<DimSize(dstData,0);i+=1)
-							temp1d[] = srcData[p][i]
-							dstData[i] = sum(temp1d,start,finish)
-						endfor
-						KillWaves temp1d
-						break
-					case 1:
-						Make/O/D/N=(DimSize(srcData,0)), $dataSumName
-						Make/O/N=(DimSize(srcData,1)) temp1d
-						WAVE dstData=$dataSumName
-						CopyWaveAttributes(dataName,0,dataSumName,0)
-						for(i=0;i<DimSize(dstData,0);i+=1)
-							temp1d[] = srcData[i][p]
-							dstData[i] = sum(temp1d,start,finish)
-						endfor
-						KillWaves temp1d
-						break
-				endswitch
+				DeletePoints dim,1, dimList
+				if (!wholeRange)
+					if (dim==0)
+						duplicate /O /RMD=[start,finish][][] srcData,srcCopy
+					elseif (dim==1)
+						duplicate /O /RMD=[][start,finish][] srcData,srcCopy
+					endif
+				endif
+				SumDimension /D=(dim)/DEST=$dataSumName srcCopy
+				CopyWaveAttributes(dataName,dimList[0],dataSumName,0)
 				break
 			case 3:
-				switch(dim)// dimension to be reduced
-					// TODO add other options and remove switch case
-					case 0:
-						Make/O/D/N=(DimSize(srcData,1),DimSize(srcData,2)), $dataSumName
-						Make/O/N=(DimSize(srcData,0)) temp1d
-
-						WAVE dstData=$dataSumName
-
-						CopyWaveAttributes(dataName,1,dataSumName,0)
-						CopyWaveAttributes(dataName,2,dataSumName,1)
-
-						for(j=0;j<DimSize(dstData,1);j+=1)
-							for(i=0;i<DimSize(dstData,0);i+=1)
-								temp1d[] = srcData[p][i][j]
-								dstData[i][j] = sum(temp1d,start,finish)
-							endfor
-						endfor
-
-						KillWaves temp1d
-						break
-
-				endswitch
+				DeletePoints dim,1, dimList
+				if (!wholeRange)
+					if (dim==0)
+						duplicate /O /RMD=[start,finish][][] srcData,srcCopy
+					elseif (dim==1)
+						duplicate /O /RMD=[][start,finish][] srcData,srcCopy
+					elseif (dim==2)
+						duplicate /O /RMD=[][][start,finish] srcData,srcCopy
+					endif
+				endif
+				SumDimension /D=(dim)/DEST=$dataSumName srcCopy
+				CopyWaveAttributes(dataName,dimList[0],dataSumName,0)
+				CopyWaveAttributes(dataName,dimList[1],dataSumName,1)
 				break
 			case 4:
-				switch(dim)// dimension to be reduced
-					case 0:
-						Make/O/D/N=(DimSize(srcData,1),DimSize(srcData,2),DimSize(srcData,3)), $dataSumName
-						Make/O/N=(DimSize(srcData,0)) temp1d
+				//Make/O/N=(DimSize(srcData,0)) temp1d
+				DeletePoints dim,1, dimList
 
-						WAVE dstData=$dataSumName
-
-						CopyWaveAttributes(dataName,1,dataSumName,0)
-						CopyWaveAttributes(dataName,2,dataSumName,1)
-						CopyWaveAttributes(dataName,3,dataSumName,2)
-
-						for(k=0;k<DimSize(dstData,2);k+=1)
-							for(j=0;j<DimSize(dstData,1);j+=1)
-								for(i=0;i<DimSize(dstData,0);i+=1)
-									temp1d[] = srcData[p][i][j][k]
-									dstData[i][j][k] = sum(temp1d,start,finish)
-								endfor
-							endfor
-						endfor
-
-						KillWaves temp1d
-						break
-				endswitch
+				if (!wholeRange)
+					if (dim==0)
+						duplicate /O /RMD=[start,finish][][][] srcData,srcCopy
+					elseif (dim==1)
+						duplicate /O /RMD=[][start,finish][][] srcData,srcCopy
+					elseif (dim==2)
+						duplicate /O /RMD=[][][start,finish][] srcData,srcCopy
+					elseif (dim==3)
+						duplicate /O /RMD=[][][][start,finish] srcData,srcCopy
+					endif
+				endif
+				SumDimension /D=(dim)/DEST=$dataSumName srcCopy
+				CopyWaveAttributes(dataName,dimList[0],dataSumName,0)
+				CopyWaveAttributes(dataName,dimList[1],dataSumName,1)
+				CopyWaveAttributes(dataName,dimList[2],dataSumName,2)
 				break
 		endswitch
 	endif

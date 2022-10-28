@@ -67,7 +67,9 @@ The last browser (3D) might be used also to browse all ares of a region scan (af
 - "Spectra" - browse 1D (for spectroimage) or 2D (for 4D image) spectra.
 
 ##### 1D and 2D spectra browser
-For each single pixel in a spectroimage in the data the whole energy (and also momentum for 4D images) spectrum is stored. When the "Spectra" button is pressed a new window called BSI_ (Browse spectroimage) is created. The spectra are shown there as blue and green curves for two points selected by cursors A and B on a corresponding spectroimage. The spectra are automatically updated when at least one of the cursor is moved. The area of integration is by default set to 1 pixel but could be changed using "Probe area". The spectra are stored in two separated waves called: SMI****_SA and _SB.
+For each single pixel in a spectroimage data the whole energy (and also momentum for 4D images) spectrum is stored. When the "Spectra" button is pressed a new window called BSI_ (Browse spectroimage) is created. The spectra are shown there as red and green curves for two points selected by cursors A and B on a corresponding spectroimage. The spectra are automatically updated when at least one of the cursor is moved. The area of integration is by default set to 1 pixel but could be changed using "Probe area". The spectra are stored in two separated waves called: SMI****_SA and _SB.
+
+If "Select range" is checked the spectroimage is integrated only in the range selected using Ek start/stop (end Ang. start/stop in case of 4D images).
 
 
 
