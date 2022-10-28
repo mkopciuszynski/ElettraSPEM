@@ -1,6 +1,6 @@
 #pragma TextEncoding = "UTF-8"
 #pragma rtGlobals=3 // Use modern global access method and strict wave access.
-#pragma version = 6.8
+#pragma version=7.0
 /////////////////////////////////////////////
 // Spectromicsroscopy beamline Elettra
 // Alexei Barinov
@@ -61,13 +61,14 @@ proc SPEM_Init()
 
 	SetDataFolder ksDataFolder
 	// Load color map from matplotlib tables
-	//LoadWave/O/P = Igor ":Color Tables:Matplotlib:viridis.ibw"
-	LoadWave/O/P = IgorUserFiles ":User Procedures:ElettraSPEM:viridis.ibw"
+	LoadWave/O/Q/P = IgorUserFiles ":User Procedures:ElettraSPEM:viridis.ibw"
 
+	print " "
 	print "==========================================="
-	print "The SPEM routines loaded successfully"
+	print "*Elettra SPEM routines loaded successfully*"
 	print "==========================================="
+	print " "
 	print "The latest version and instructions could be found here:"
 	print "https://github.com/mkopciuszynski/ElettraSPEM"
-	print "==========================================="
+	print " "
 end

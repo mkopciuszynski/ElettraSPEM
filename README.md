@@ -58,13 +58,18 @@ If some data were already loaded to Igor but the graph was closed it could be re
 - SPEM -> browse loaded 3d maps
 The last browser (3D) might be used also to browse all ares of a region scan (after the data are loaded only the last line is snown). 
 
-### Additional features depending on data type
+### Additional features depending on the data type
 
 #### Buttons
-- "del" - remove completely data form Igor (the source hdf5 file is not removed).
-- "add xz" - draws a point at x and z coordinates of selected 2d/3d arpes measurement.
-- "info" - print information about selected measurement in command window.
-- "spectra" - browse 1d (for spectroimage) or 2d (for 4d image) spectra.
+- "Del" - remove completely data form Igor (the source hdf5 file is not removed).
+- "Add xz" - draws a point at x and z coordinates of selected 2d/3d arpes measurement.
+- "Info" - print information about selected measurement in command window.
+- "Spectra" - browse 1D (for spectroimage) or 2D (for 4D image) spectra.
+
+##### 1D and 2D spectra browser
+For each single pixel in a spectroimage in the data the whole energy (and also momentum for 4D images) spectrum is stored. When the "Spectra" button is pressed a new window called BSI_ (Browse spectroimage) is created. The spectra are shown there as blue and green curves for two points selected by cursors A and B on a corresponding spectroimage. The spectra are automatically updated when at least one of the cursor is moved. The area of integration is by default set to 1 pixel but could be changed using "Probe area". The spectra are stored in two separated waves called: SMI****_SA and _SB.
+
+
 
 #### ARPES data normalization / detector correction
 Select 2d or 3d arpes data and press norm. button. New panel "data normalization" is created. Several options are available.

@@ -670,27 +670,163 @@ function eventBrowseSpectra(ctrlName): ButtonControl
 
 	String sbName = "BSI_"+graphName
 	If(strlen(StringFromList(0,WinList(sbName,";","WIN:1")))==0)
-		// create browser window if not exist
+		// create browser window if does not exist
 		Variable/G root:SPMData:gProbeArea = 1
 		DoWindow/K sbName
-		Display/W=(700,50,900,250)/K=1/N=$sbName
-		ControlBar 30
+		Display/W=(700,50,900,300)/K=1/N=$sbName
+		ControlBar 60
 		SetActiveSubwindow $sbName
+		Variable ekLimL,ekLimH,angLimL,angLimH
 		if (WaveDims(spectrumA)==1)
-			Button setProbeArea,pos={10,5},size={100,20},title="Probe area",proc=eventSetProbeArea,help={"Set global value for integration size "}
+			// 3D spectroimage
+			Button bSetProbeArea, pos={10,5},size={80,20},title="Probe area", proc=eventSetProbeArea,help={"Set global value for the integration size"}
+			CheckBox cRangeActive,pos={120,10},size={80,15},title="Select range",proc=eventRangeActive,  help={"Integrate spectroimage over selected energy/angle range"}
+			SetVariable svEkstart,pos={10,30},size={80,20},title="Ek Start"
+			SetVariable svEkstop, pos={100,30},size={80,20},title="Ek Stop"
+			// Add both spectra and selected region to the graph
 			AppendToGraph /C=(65535,0,0) spectrumA
 			AppendToGraph /C=(0,40000,0) spectrumB
+			// Setup the range selectors
+			ekLimL = DimOffset(spectrumA,0)
+			ekLimH = DimOffset(spectrumA,0)+DimSize(spectrumA,0)*DimDelta(spectrumA,0)
+			ekLimL = round(ekLimL*10)*0.1
+			ekLimH = round(ekLimH*10)*0.1
+			SetVariable svEkstart, limits={ekLimL,ekLimH,0.2}, value = _NUM:ekLimL, proc = eventSetSiRange
+			SetVariable svEkstop,  limits={ekLimL,ekLimH,0.2}, value = _NUM:ekLimH, proc = eventSetSiRange
+			// Draw region
+			DrawAction delete
+			SetDrawEnv xcoord= bottom,ycoord= left,linefgc= (0,0,65535),fillpat= 0, linethick= 2.00;DelayUpdate
+			DrawRect ekLimL,0,ekLimH,10
 		else
-			Button makePlot,pos={10,5},size={100,20},title="Save as new plot",proc=eventMakePlotFrom4D,help={"Plot this data in new window"}
+			// 4D spectroimage
+			Button makePlot,pos={10,5},size={100,20},title="Save as new plot",proc=eventMakePlotFrom4D,help={"Plot this data in a new window"}
+			CheckBox cRangeActive,pos={120,10},size={80,15},title="Select range",proc=eventRangeActive,  help={"Integrate spectroimage over selected energy/angle range"}
+			SetVariable svEkstart,pos={10,30},size={80,20},title="Ek Start"
+			SetVariable svEkstop, pos={100,30},size={80,20},title="Ek Stop"
+			SetVariable svAngstart,pos={10,45},size={80,20},title="Ang. Start"
+			SetVariable svAngstop, pos={100,45},size={80,20},title="Ang. Stop"
+			// Setup the range selectors
+			ekLimL = DimOffset(spectrumA,0)
+			ekLimH = DimOffset(spectrumA,0)+DimSize(spectrumA,0)*DimDelta(spectrumA,0)
+			ekLimL = round(ekLimL*10)*0.1
+			ekLimH = round(ekLimH*10)*0.1
+			SetVariable svEkstart,	limits={ekLimL,ekLimH,0.2}, value = _NUM:ekLimL, proc = eventSetSiRange
+			SetVariable svEkstop,  limits={ekLimL,ekLimH,0.2}, value = _NUM:ekLimH, proc = eventSetSiRange
+
+			angLimL = DimOffset(spectrumA,1)
+			angLimH = DimOffset(spectrumA,1)+DimSize(spectrumA,1)*DimDelta(spectrumA,1)
+			angLimL = round(angLimL*10)*0.1
+			angLimH = round(angLimH*10)*0.1
+			SetVariable svAngstart,	limits={angLimL,angLimH,0.5}, value = _NUM:angLimL, proc = eventSetSiRange
+			SetVariable svAngstop,  limits={angLimL,angLimH,0.5}, value = _NUM:angLimH, proc = eventSetSiRange
+
+			// Add 2d spectrum and range selection plots to the graph
 			AppendImage spectrumA
-			//ModifyGraph width=150
 			ModifyImage '' ctab= {*,*,$ksColorMap,0}
 			ModifyGraph swapXY=1
+			// Draw region
+			DrawAction delete
+			SetDrawEnv xcoord= bottom,ycoord= left,linefgc= (65535,0,0),fillpat= 0, linethick= 2.00;DelayUpdate
+			DrawRect angLimL,ekLimL,angLimH,ekLimH
+
 		endif
 		//TitleBox xPosLabel, pos={90,5},size={30,15},title="X=",frame=0
 		ModifyGraph mirror=1,standoff=0
 	else
 		DoWindow/F $sbName
+	endif
+	return 0
+end function
+
+// event change the size of integration area in spectrum browser
+Function eventSetSiRange(SV_Struct) : SetVariableControl
+	STRUCT WMSetVariableAction &SV_Struct
+
+	String bsiName=WinName(0,1)		//Get the graph name
+	String dataName = StringFromList(0,TraceNameList("","",1)+ImageNameList("",""))
+	String originName = dataName[0,strsearch(dataName,"_SA",0)-1]
+	String spectrumAName = originName + "_SA"
+	String spectrumBName = originName + "_SB"
+	String dataSumName = originName + "_sum"
+
+	Variable startEind,stopEind,startAind,stopAind
+	Variable ek1,ek2,ang1,ang2
+	if (WaveDims($originName)==3)
+		wave spectrumA = $spectrumAName
+		wave spectrumB = $spectrumBName
+		// Get the values from two value controls
+		ControlInfo /W=$bsiName svEkStart
+		ek1 =  V_Value
+		ControlInfo /W=$bsiName svEkStop
+		ek2 =  V_Value
+		// Draw region
+		DrawAction delete
+		SetDrawEnv xcoord= bottom,ycoord= left,linefgc= (0,0,65535),fillpat= 0, linethick= 2.00;DelayUpdate
+		DrawRect ek1,0,ek2,max(WaveMax(spectrumA),WaveMax(spectrumB))
+
+		// Find start and stop values
+		startEInd = round((min(ek1,ek2)-DimOffset(spectrumA,0))/DimDelta(spectrumA,0))
+		stopEInd = round((max(ek1,ek2)-DimOffset(spectrumA,0)-DimDelta(spectrumA,0))/DimDelta(spectrumA,0))
+		// Finally refresh the original spectroimage
+		ControlInfo /W=$bsiName cRangeActive
+		// If Range Active check box selected
+		if (V_Value)
+			ReduceDim(originName,0,dataSumName,start=startEind,finish=stopEind)
+		endif
+	elseif (WaveDims($originName)==4)
+		wave spectrumA = $spectrumAName
+		// Get the values from value controls
+		ControlInfo /W=$bsiName svEkStart
+		ek1 =  V_Value
+		ControlInfo /W=$bsiName svEkStop
+		ek2 =  V_Value
+		ControlInfo /W=$bsiName svAngStart
+		ang1 =  V_Value
+		ControlInfo /W=$bsiName svAngStop
+		ang2 =  V_Value
+		// Draw region
+		DrawAction delete
+		SetDrawEnv xcoord= bottom,ycoord= left,linefgc= (65535,0,0),fillpat= 0, linethick= 2.00;DelayUpdate
+		DrawRect ang1,ek1,ang2,ek2
+		// Find start and stop values
+		startEind = round((min(ek1,ek2)-DimOffset(spectrumA,0))/DimDelta(spectrumA,0))
+		stopEind = round((max(ek1,ek2)-DimOffset(spectrumA,0)-DimDelta(spectrumA,0))/DimDelta(spectrumA,0))
+		startAind = round((min(ang1,ang2)-DimOffset(spectrumA,1))/DimDelta(spectrumA,1))
+		stopAind = round((max(ang1,ang2)-DimOffset(spectrumA,1)-DimDelta(spectrumA,1))/DimDelta(spectrumA,1))
+		//// Finally refresh the original spectroimage
+		ControlInfo /W=$bsiName cRangeActive
+		//// If Range Active check box selected
+		if (V_Value)
+			String dataSumE = originName+"_sumE"
+			ReduceDim(originName,0,dataSumE,start=startEind,finish=stopEind)
+			ReduceDim(dataSumE,0,dataSumName,start=startAind,finish=stopAind)
+			killwaves $dataSumE
+		endif
+	endif
+	return 0
+End
+
+// Re/Set the kinetic energy range active
+function eventRangeActive(cb) : CheckBoxControl
+	STRUCT WMCheckboxAction& cb
+
+	if (cb.checked)
+		STRUCT WMSetVariableAction st
+		eventSetSiRange(st)
+	else
+		String bsiName=WinName(0,1)		//Get the graph name
+		String dataName = StringFromList(0,TraceNameList("","",1)+ImageNameList("",""))
+		String originName = dataName[0,strsearch(dataName,"_SA",0)-1]
+		String dataSumName = originName + "_sum"
+
+		if (WaveDims($originName)==3)
+			ReduceDim(originName,0,dataSumName)
+		elseif (WaveDims($originName)==4)
+			string datasume = originname+"_sume"
+			reducedim(originname,0,datasume)
+			reducedim(datasume,0,datasumname)
+			killwaves $datasume
+		endif
 	endif
 	return 0
 end function
@@ -707,6 +843,7 @@ function eventSetProbeArea(ctrlName) : ButtonControl
 	Variable/G root:SPMData:gProbeArea = str2num(integSize)
 	return 0
 end function
+
 
 // Make separate plot form 4D image
 function eventMakePlotFrom4D(ctrlName) : ButtonControl
@@ -1073,8 +1210,8 @@ Function addLegend(dataName)
 			slegend += num2str(round(str2num(atts[%$dataName][%$ksaP])*10)*0.1)+"° / "
 			slegend += num2str(round(str2num(atts[%$dataName][%$ksaT])*10)*0.1)+"° \rEk = "
 			slegend += num2str(round((	 str2num(atts[%$dataName][%$ksOffset0])  \
-												+str2num(atts[%$dataName][%$ksDelta0])   \
-												*dimSize($dataName,0)*0.5)*10)*0.1)+" eV"
+			+str2num(atts[%$dataName][%$ksDelta0])   \
+			*dimSize($dataName,0)*0.5)*10)*0.1)+" eV"
 			break
 		case ksImage4D:
 			slegend = "\Z08P/T = "
