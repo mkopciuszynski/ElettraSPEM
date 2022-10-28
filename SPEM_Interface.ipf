@@ -673,16 +673,16 @@ function eventBrowseSpectra(ctrlName): ButtonControl
 		// create browser window if does not exist
 		Variable/G root:SPMData:gProbeArea = 1
 		DoWindow/K sbName
-		Display/W=(700,50,900,300)/K=1/N=$sbName
-		ControlBar 60
+		Display/W=(700,50,920,300)/K=1/N=$sbName
+		ControlBar 70
 		SetActiveSubwindow $sbName
 		Variable ekLimL,ekLimH,angLimL,angLimH
 		if (WaveDims(spectrumA)==1)
 			// 3D spectroimage
-			Button bSetProbeArea, pos={10,5},size={80,20},title="Probe area", proc=eventSetProbeArea,help={"Set global value for the integration size"}
-			CheckBox cRangeActive,pos={120,10},size={80,15},title="Select range",proc=eventRangeActive,  help={"Integrate spectroimage over selected energy/angle range"}
-			SetVariable svEkstart,pos={10,30},size={80,20},title="Ek Start"
-			SetVariable svEkstop, pos={100,30},size={80,20},title="Ek Stop"
+			Button bSetProbeArea, pos={10,5},size={95,20},title="Probe area", proc=eventSetProbeArea,help={"Set global value for the integration size"}
+			CheckBox cRangeActive,pos={115,10},size={95,15},title="Select range",proc=eventRangeActive,  help={"Integrate spectroimage over selected energy/angle range"}
+			SetVariable svEkstart,pos={10,30},size={95,20},title="Ek Start"
+			SetVariable svEkstop, pos={115,30},size={95,20},title="Ek Stop"
 			// Add both spectra and selected region to the graph
 			AppendToGraph /C=(65535,0,0) spectrumA
 			AppendToGraph /C=(0,40000,0) spectrumB
@@ -699,12 +699,12 @@ function eventBrowseSpectra(ctrlName): ButtonControl
 			DrawRect ekLimL,0,ekLimH,10
 		else
 			// 4D spectroimage
-			Button makePlot,pos={10,5},size={100,20},title="Save as new plot",proc=eventMakePlotFrom4D,help={"Plot this data in a new window"}
-			CheckBox cRangeActive,pos={120,10},size={80,15},title="Select range",proc=eventRangeActive,  help={"Integrate spectroimage over selected energy/angle range"}
-			SetVariable svEkstart,pos={10,30},size={80,20},title="Ek Start"
-			SetVariable svEkstop, pos={100,30},size={80,20},title="Ek Stop"
-			SetVariable svAngstart,pos={10,45},size={80,20},title="Ang. Start"
-			SetVariable svAngstop, pos={100,45},size={80,20},title="Ang. Stop"
+			Button makePlot,pos={10,5},size={95,20},title="Save as new plot",proc=eventMakePlotFrom4D,help={"Plot this data in a new window"}
+			CheckBox cRangeActive,pos={115,10},size={95,15},title="Select range",proc=eventRangeActive,  help={"Integrate spectroimage over selected energy/angle range"}
+			SetVariable svEkstart,pos={10,30},size={95,20},title="Ek Start"
+			SetVariable svEkstop, pos={115,30},size={95,20},title="Ek Stop"
+			SetVariable svAngstart,pos={10,50},size={95,20},title="Ang. Start"
+			SetVariable svAngstop, pos={115,50},size={95,20},title="Ang. Stop"
 			// Setup the range selectors
 			ekLimL = DimOffset(spectrumA,0)
 			ekLimH = DimOffset(spectrumA,0)+DimSize(spectrumA,0)*DimDelta(spectrumA,0)

@@ -106,7 +106,6 @@ function/T LoadHDF5Table(filePathName)
 					HA=HDF5AttributeInfo(fileID,"/"+DataSetName,2,CurrentAttribute,0,di)	//Obtains type of the current attribute
 					HDF5LoadData/A=CurrentAttribute/O/Q fileID, DataSetName             //Loads attribute value(s) into wave CurrentAttribute
 					CurrentAtt=Attribute2tableNumber(CurrentAttribute)
-					CurrentAttribute=CurrentAttribute[0,30]
 					if(V_flag==0)
 						// Check if attribute is string or number, and assign it's value with appropriate conversion
 						strswitch(di.datatype_str)
@@ -130,8 +129,6 @@ function/T LoadHDF5Table(filePathName)
 				endfor
 			endif //HDFListAttributes
 		endif //HDFLoadData
-		WAVE tmp=$""
-		WAVE/T tmpstr=$""
 		//Sets a dataset name as a dimension label for the new row in the table
 		SetDimLabel 0,CurrentDts,$DataSetName,$ksTextAttributes
 		//Scale the axis
@@ -160,11 +157,9 @@ function/T LoadHDF5Table(filePathName)
 			WAVE Dts=$DataSetName
 			Dts/=str2num(txtAtt[CurrentDts][%$ksDwell])
 			Dts/=str2num(txtAtt[CurrentDts][%$ksScans])
-			WAVE Dts=$""
 		endif
 		//report success
 		print  txtAtt[CurrentDts][%$ksAcqType],DataSetName, "loaded"
-		WAVE/T txtAtt=$""
 	elseif(V_flag!=-1)
 		//The data load failed with V_flag error code
 	endif
