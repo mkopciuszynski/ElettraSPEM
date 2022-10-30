@@ -363,7 +363,7 @@ Function eventBrowseEK(ctrlName): ButtonControl
 	endif
 end
 /////////////////////////////
-// cursor moved event - used on constant energy map and spectro image
+// cursor moved event - used on constant energy map and spectroimage
 function eventCursorMoved(H_Struct)
 	STRUCT WMWinHookStruct &H_Struct
 	if(H_Struct.eventCode==7)

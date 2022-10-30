@@ -17,7 +17,7 @@ Function Calc2ndDiff(dataName)
 End
 
 
-// Create the new dataset for spectro image integrated over the energy/energy+angle range
+// Create the new dataset for spectroimage integrated over the energy/energy+angle range
 Function/T ImageSum(dataName)
 	String dataName
 	String dataSumName=dataName+"_sum"
@@ -38,13 +38,12 @@ end function
 
 
 // Reduce the data dimension by summation over the selected dimension (Dim)
-// Start, Finish define the range of summation
+// Start, Finish define the range of summation and are optional
 Function ReduceDim(dataName,Dim,dataSumName,[Start,Finish])
 	String dataName,dataSumName
 	Variable Dim,Start,Finish
-	Variable i,j,k,m
-	Variable wholeRange
 	// Check if optional parameters were provided, otherwise the whole range will be used
+	Variable wholeRange
 	if( ParamIsDefault(Start) && ParamIsDefault(Finish) )
 		wholeRange = 1
 	endif
@@ -58,19 +57,18 @@ Function ReduceDim(dataName,Dim,dataSumName,[Start,Finish])
 		Duplicate /O srcData, srcCopy
 		switch (dataDim)// data dimension
 			case 2:
-				DeletePoints dim,1, dimList
-				if (!wholeRange)
+				if (!wholeRange) // remove points that are not in start - finish range
 					if (dim==0)
 						duplicate /O /RMD=[start,finish][][] srcData,srcCopy
 					elseif (dim==1)
 						duplicate /O /RMD=[][start,finish][] srcData,srcCopy
 					endif
 				endif
+				DeletePoints dim,1, dimList
 				SumDimension /D=(dim)/DEST=$dataSumName srcCopy
 				CopyWaveAttributes(dataName,dimList[0],dataSumName,0)
 				break
 			case 3:
-				DeletePoints dim,1, dimList
 				if (!wholeRange)
 					if (dim==0)
 						duplicate /O /RMD=[start,finish][][] srcData,srcCopy
@@ -80,14 +78,12 @@ Function ReduceDim(dataName,Dim,dataSumName,[Start,Finish])
 						duplicate /O /RMD=[][][start,finish] srcData,srcCopy
 					endif
 				endif
+				DeletePoints dim,1, dimList
 				SumDimension /D=(dim)/DEST=$dataSumName srcCopy
 				CopyWaveAttributes(dataName,dimList[0],dataSumName,0)
 				CopyWaveAttributes(dataName,dimList[1],dataSumName,1)
 				break
 			case 4:
-				//Make/O/N=(DimSize(srcData,0)) temp1d
-				DeletePoints dim,1, dimList
-
 				if (!wholeRange)
 					if (dim==0)
 						duplicate /O /RMD=[start,finish][][][] srcData,srcCopy
@@ -99,6 +95,7 @@ Function ReduceDim(dataName,Dim,dataSumName,[Start,Finish])
 						duplicate /O /RMD=[][][][start,finish] srcData,srcCopy
 					endif
 				endif
+				DeletePoints dim,1, dimList
 				SumDimension /D=(dim)/DEST=$dataSumName srcCopy
 				CopyWaveAttributes(dataName,dimList[0],dataSumName,0)
 				CopyWaveAttributes(dataName,dimList[1],dataSumName,1)
@@ -106,6 +103,7 @@ Function ReduceDim(dataName,Dim,dataSumName,[Start,Finish])
 				break
 		endswitch
 	endif
+	KillWaves srcCopy,dimList
 End Function
 
 

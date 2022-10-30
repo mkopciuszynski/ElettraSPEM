@@ -1,6 +1,9 @@
 # ElettraSPEM
 Elettra Spectromicroscopy Igor Pro routines
 
+## Description
+This routines could be used to load and process data measured at Spectromicsorcopy beamline at Elettra Trieste.
+
 ## Requiements
 Igor Pro from WaveMetrics. Version 8.0 or newer (tested on 64-bit version of Igor Pro 8.04 and 9.01).
 
@@ -29,7 +32,7 @@ ElettraSPEM procedures require hdf5 libraries. On Igor Pro 8 those libraries sho
 ## Basic usage of SPEM routines
 
 ### Load procedures
-In Igor Pro menus open: data -> load SPEM
+In Igor Pro menus open: Data -> Load SPEM
 
 ### Load data
 The data in a form of:
@@ -38,43 +41,48 @@ The data in a form of:
 - 2D scan (SMP),
 - 1D spectrum (SMP),
 
-Could be loaded using F2 key or select: SPEM -> Load data
-In case of 4d images it might take a while.
+Could be loaded using F2 key shortcut or using menu: SPEM -> Load data
+In case of 4D images it might take a while.
 
 ### Load 3D Map
-3D map are stored in separate directories as a serries of SMPM files. 
-To load this kind of data press F3 or select: SPEM -> Load sequence of data.
+3D maps are stored in a separate directories as a serries of SMPM files. 
+To load this kind of data press F3 key shortcut or select in menu: SPEM -> Load sequence of data.
 
 - You can select any file in D3_X directory.
-- All files in that directory are loaded and the data are automatically converted to one or many 3d waves (depending on measurements type).
-- The software automatically detect the type of scan region/line.
-- If the region contains many line scans only the last is shown (see below how to open all of them).
+- All files in that directory are loaded and the data are automatically converted to one or many 3D waves (depending on a type of measurement).
+- The software automatically detect the type of scan region or line.
+- If the region contains many line scans, only the last one is shown (see below how to open all of them).
 - Data are presented as a constant energy maps vs p/nu angles.
 
 ### Browse loaded data
 If some data were already loaded to Igor but the graph was closed it could be recreated using:
-- SPEM -> browse loaded spectroimages
-- SPEM -> browse loaded 2d maps
-- SPEM -> browse loaded 3d maps
-The last browser (3D) might be used also to browse all ares of a region scan (after the data are loaded only the last line is snown). 
+- SPEM -> Browse loaded spectroimages
+- SPEM -> Browse loaded 2d maps
+- SPEM -> Browse loaded 3d maps
+The last browser (3D) might be used also to browse all the areas of a region scan (after the data are loaded only the last line is shown). 
 
-### Additional features depending on the data type
+### Additional features
+They appear on certain data type. For example "To K" is visible on on a 2D scan.
 
 #### Buttons
 - "Del" - remove completely data form Igor (the source hdf5 file is not removed).
-- "Add xz" - draws a point at x and z coordinates of selected 2d/3d arpes measurement.
+- "Add XY" - draw a point at x and z coordinates of selected 2d/3d ARPES measurement.
 - "Info" - print information about selected measurement in command window.
-- "Spectra" - browse 1D (for spectroimage) or 2D (for 4D image) spectra.
+- "Spectra" - browse 1D (for spectroimage) or 2D (for 4D image) spectra of.
+- "Norm" - look below "ARPES data normalization"
+- "To K" - it is available on 2D ARPES spectrum and it allows rough transformation to K space (it is accurate only in the vicinity of the Gamma point).
+- "Trans. to K" - this is available on 3D scans and allows the transformation to K space. Some parameters like Fermi Energy and P and T values for normal emission could be set in a dialog window.
+- "Browse E" - browse the E(ang) or E(k) cuts of the 3D scans.
+- "Save as new plot / Make plot / Make E(k) plot" - all of those allow to make a copy of data shown in the current window and create a separate plot.
 
-##### 1D and 2D spectra browser
-For each single pixel in a spectroimage data the whole energy (and also momentum for 4D images) spectrum is stored. When the "Spectra" button is pressed a new window called BSI_ (Browse spectroimage) is created. The spectra are shown there as red and green curves for two points selected by cursors A and B on a corresponding spectroimage. The spectra are automatically updated when at least one of the cursor is moved. The area of integration is by default set to 1 pixel but could be changed using "Probe area". The spectra are stored in two separated waves called: SMI****_SA and _SB.
+#### 1D and 2D spectra browser
+For each single pixel in a spectroimage the spectrum of whole energy range of the detector is stored (and also momentum for 4D images). When the "Spectra" button is pressed a new window called BSI_ (Browse spectroimage) is created. The spectra are shown there as red and green curves for two points selected by cursors A and B on a corresponding spectroimage. The spectra are automatically updated when at least one of the cursor is moved. The area of integration is by default set to 1 pixel but could be changed using "Probe area". The spectra are stored in two separated waves called: SMI****_SA and _SB.
 
-If "Select range" is checked the spectroimage is integrated only in the range selected using Ek start/stop (end Ang. start/stop in case of 4D images).
-
+If "Select range" is checked the spectroimage is integrated only in the range selected using Ek start/stop (and Ang. start/stop in case of 4D images).
 
 
 #### ARPES data normalization / detector correction
-Select 2d or 3d arpes data and press norm. button. New panel "data normalization" is created. Several options are available.
+Select 2D or 3D ARPES data and press "Norm" button. New panel "data normalization" is created. Several options are available.
 
 #### Integral normalization
 First tab allows to adjust the integral normalization. 
