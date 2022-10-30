@@ -4,6 +4,8 @@ Elettra Spectromicroscopy Igor Pro routines
 ## Description
 This routines could be used to load and process data measured at Spectromicsorcopy beamline at Elettra Trieste.
 
+![screenshot](/README_Screenshot.png)
+
 ## Requiements
 Igor Pro from WaveMetrics. Version 8.0 or newer (tested on 64-bit version of Igor Pro 8.04 and 9.01).
 
@@ -62,7 +64,7 @@ If some data were already loaded to Igor but the graph was closed it could be re
 The last browser (3D) might be used also to browse all the areas of a region scan (after the data are loaded only the last line is shown). 
 
 ### Additional features
-They appear on certain data type. For example "To K" is visible on on a 2D scan.
+They appear on certain data type. For example "To K" is visible only on a 2D scan.
 
 #### Buttons
 - "Del" - remove completely data form Igor (the source hdf5 file is not removed).
