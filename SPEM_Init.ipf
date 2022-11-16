@@ -65,7 +65,7 @@ proc SPEM_Init()
 
 	print " "
 	print "==========================================="
-	print "*Elettra SPEM routines loaded successfully*"
+	print " Elettra SPEM routines loaded successfully "
 	print "==========================================="
 	print " "
 	print "The latest version and instructions could be found here:"

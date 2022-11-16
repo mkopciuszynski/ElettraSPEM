@@ -287,7 +287,7 @@ function/T GetByName(DatasetName,Attribute)
 end
 
 
-// NOR working properly!!!
+// NOT working properly!!!
 //Deletes absent datasets from table
 function VerifyTable()
 	String fldrSav=GetDataFolder(1)

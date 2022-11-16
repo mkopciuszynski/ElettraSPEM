@@ -112,6 +112,16 @@ If during the beamtime the detector active area was changed (different number of
 
 Before the normalization panel is created the data are copied to separate data directory and in case of a "revert" button is pressed the data are restored.
 
+## Transformation to K space
+The procedures responsible for the transformation to the K space are stored in SPEM_Kspace.ipf file. 
+
+Three different transformation procedures are available. Two of them (the name starting with 'R') are reverse transformations. This means that the angles P and Nu are calculated for a given point of predefined K space. In case of "Direct" transformation the Kx and Ky for each measured point are calculated directly using P, T, Nu angles (also taking into account possible tilt of the sample). 
+
+1. `R-simple` This transformation is the most efficient and it is used by default. However it is not exact, especially for tilted (cleaved) samples. We recommend to use it only to preview the results.
+2. `R-complete` This transformation uses numerical solution and is more exact than the "R-simple".
+3. `Direct` This transformation is the most time consuming but should be the most accurate. Unfortunately in case of low count/high noise data it may produce odd looking maps.
+
+
 
 ### Appendix HDF5 libraries on Igor Pro
 1. Make an alias/shortcut for the following file: igor pro folder\more extensions\file loaders\hdf5.xop. 

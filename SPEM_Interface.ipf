@@ -127,20 +127,44 @@ Function Display1Dspectrum(dataName)
 	if (WaveExists($dataName))
 		// Check the type of data in opened window
 		String wName = StringFromList(0,TraceNameList("",";",1))
-		if (strlen(wName)>5)
+		variable createNewGraph = 0 // 0 means append to current graph if it already shows spectrum
+		if (strlen(wName)>5 && StringMatch(wName,"SMP*"))
 			WAVE/T atts=$ksTextAttributes
 			String dataType = atts[%$wName][%$ksAcqType]
 			if (stringMatch(dataType,ksSpectrum))
 				DoAlert 1, "Do you want to append data to the current graph?"
 				if (V_flag==2)	// User clicked NO
-					Display /W=(200,50,450,250)
+					createNewGraph = 1
 				endif
-				AppendToGraph $dataName
 			endif
 		else
-			Display /W=(200,50,450,250)
-			AppendToGraph $dataName
+			createNewGraph = 1
+		endif
+		// Create new graph or append data
+		wave colorTable= $ksColorMap
+		if (createNewGraph)
+			Display /W=(200,50,450,300)
+			AppendToGraph /C=(0,0,0) $dataName
 			DelayUpdate
+			ControlBar 30       // create controls
+			Button btnFind,pos={10,5},size={40,20},title="Del",proc=eventDeleteData, help={"Delete the data from Igor"}
+			Button btnShowInf,pos={60,5},size={40,20},title="Info",proc=eventShowInfo,  help={"Show info about the measurement"}
+		else
+			// append to graph with different color
+			if (WaveExists(colorTable))
+				Variable numOfPlots = ItemsInList(TraceNameList("",";",1))
+				if (numOfPlots*50>DimSize(colorTable,0))
+					numOfPlots = 1
+				endif
+				numOfPlots -= 1
+				Variable cr = colorTable[numOfPlots*50][0]
+				Variable cg = colorTable[numOfPlots*50][1]
+				Variable cb = colorTable[numOfPlots*50][2]
+				print cr,cg,cb
+				AppendToGraph /C=(cr,cg,cb) $dataName
+			else
+				AppendToGraph /C=(17476,257,21588) $dataName
+			endif
 		endif
 	endif
 End function
@@ -177,7 +201,7 @@ Function DisplayECmap(Wname) : Graph
 	string Wname
 	variable Ek,Ekin,Emin,Emax,KE,deltaE
 	PauseUpdate; Silent 1
-	Display /W=(50,50,405,380)
+	Display/K=1 /W=(50,50,405,380)
 	AppendImage $WName
 	string graphname=Winname(0,1)
 
@@ -237,7 +261,8 @@ end
 // Event print the info button
 function eventShowInfo(ctrlName): ButtonControl
 	string ctrlName
-	String srcName = StringFromList(0,ImageNameList("",";"))
+	//String srcName = StringFromList(0,ImageNameList("",";"))
+	String srcName = StringFromList(0,TraceNameList("","",1)+ImageNameList("",""))
 	String dataName
 	Variable ind
 	ind = StrSearch(srcName,"sum",0)
@@ -266,6 +291,9 @@ function eventShowInfo3D(ctrlName): ButtonControl
 	String dataName
 	Variable ind
 	ind = StrSearch(srcName,"T",0)
+	if (ind==-1)
+		ind = StrSearch(srcName,"merged",0)
+	endif
 	dataName = "SMPM" + srcName[3,ind-2] + "_001"
 	String dataName2 = "SMPM" + srcName[3,ind-2] + "_002"
 	WAVE/T atts=$ksTextAttributes
@@ -876,7 +904,7 @@ function eventDeleteData(ctrlName): ButtonControl
 	if (V_flag==2)	// User clicked NO
 		abort
 	endif
-	String name=StringFromList(0,ImageNameList("",""))	// get the window name
+	String Name = StringFromList(0,TraceNameList("","",1)+ImageNameList("",""))
 	RemoveFromAtts(name)			//Remove from table
 
 	KillWindow $WinName(0,1)	//Close top window
@@ -884,7 +912,8 @@ function eventDeleteData(ctrlName): ButtonControl
 	// Remove source data
 	if (StrSearch(name,"sum",0))
 		name = name[0,10]
-
+		KillWaves /Z $name
+	else
 		KillWaves /Z $name
 	endif
 	return 0
@@ -897,7 +926,15 @@ function eventAddXZ(ctrlName): ButtonControl
 	// prepare the basename list
 	// TODO add 2D data
 	string stemp,basenamelst=""
-	string listAll= WaveList("SMP*",";","")
+	string listAllsmp= WaveList("SMP*",";","")
+	String listAll=""
+	// Remove transferred to K space
+	for(i=0;i<ItemsInList(listAllsmp);i+=1)
+		stemp = StringFromList(i,listAllsmp,";")
+		if (StrSearch(stemp,"K",0)==-1)
+			listAll = AddListItem((stemp),listAll)
+		endif
+	endfor
 	for(i=0;i<ItemsInList(listAll);i+=1)
 		stemp = StringFromList(i,listAll,";")
 		stemp = StringFromList(0,stemp,"_")
