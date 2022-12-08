@@ -58,6 +58,7 @@ proc SPEM_Init()
 	variable/g gef27 = 23.7
 	variable/g gT0 = 0
 	variable/g gP90 = 88
+	variable/g gPgon = 0
 
 	SetDataFolder ksDataFolder
 	// Load color map from matplotlib tables

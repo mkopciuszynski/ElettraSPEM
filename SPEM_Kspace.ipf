@@ -26,6 +26,7 @@ function Transform2Dscan2K(srcName)
 	nvar gEf74 = root:SPMData:gEf74
 	nvar gT0 = root:SPMData:gT0
 	nvar gP90 = root:SPMData:gP90
+	nvar gPgon = root:SPMData:gPgon
 	Variable Ef = gEf27
 	if (startE>30)
 		Ef = gEf74
@@ -124,12 +125,13 @@ function TransformMerge2K(srcName)
 	nvar gEf74 = root:SPMData:gEf74
 	nvar gT0 = root:SPMData:gT0
 	nvar gP90 = root:SPMData:gP90
+	nvar gPgon = root:SPMData:gPgon
 	Variable Ef = gEf27
 	if ((DimOffset($srcName,2)+Dimsize($srcName,2)*Dimdelta($srcName,2))>60)
 		Ef=gEf74
 	endif
 
-	Variable P90=gP90,T0=gT0, dgonP=2
+	Variable P90=gP90,T0=gT0, dgonP=gPgon
 	String transType,mergeAreas
 	Prompt transType ,"Transformation type",popup,"R-simple;R-complete;Direct"
 	Prompt mergeAreas,"Merge areas?",popup,"Yes;NO"
@@ -145,6 +147,7 @@ function TransformMerge2K(srcName)
 	endif
 	gT0 = T0
 	gP90 = P90
+	gPgon = dgonP
 	variable P0 = P90-88
 
 	Variable UserNotCanceled = 1

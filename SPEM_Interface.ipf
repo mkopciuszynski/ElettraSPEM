@@ -979,19 +979,23 @@ Function ControlGlobalValues()
 	nvar gEf74 = root:SPMData:gEf74
 	nvar gT0 = root:SPMData:gT0
 	nvar gP90 = root:SPMData:gP90
+	nvar gPgon = root:SPMData:gPgon
 	variable Ef27 = gEf27
 	variable Ef74 = gEf74
 	variable T0 = gT0
 	variable P90 = gP90
+	variable Pgon = gPgon
 	prompt Ef27, "Ef for 27 eV"
 	prompt Ef74, "Ef for 74 eV"
 	prompt P90, "P for normal emission"
 	prompt T0, "T for normal emission"
-	Doprompt    "Set Fermi Level",Ef27,Ef74,P90,T0
+	prompt Pgon, "Goniometer shift in P"
+	Doprompt    "Set Fermi Level",Ef27,Ef74,P90,T0,Pgon
 	gEf27 = Ef27
 	gEf74 = Ef74
 	gT0 = T0
 	gP90 = P90
+	gPgon = Pgon
 End
 
 /////////////////////////////////////////
