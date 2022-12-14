@@ -7,7 +7,7 @@ This routines could be used to load and process data measured at Spectromicsorco
 ![screenshot](/README_Screenshot.png)
 
 ## Requiements
-Igor Pro from WaveMetrics. Version 8.0 or newer (tested on 64-bit version of Igor Pro 8.04 and 9.01).
+Igor Pro from WaveMetrics. Version 7.0 or newer, preferably 64-bit version. (Routines were tested on the 64-bit version of Igor Pro 8.04 and 9.01).
 
 For older version of Igor Pro see our old routines: 
 
@@ -22,11 +22,12 @@ On MS Windows User Procedures are stored in (for example):
 ```
 C:\Users\user.name\Documents\WaveMetrics\Igor Pro 9 User Files\User Procedures
 ```
-3. Create an alias/shortcut of Menu_SPEM.ipf file and paste it in Igor Procedures directory (for example):
+3. Check if our procedures are directly in the "...\User Procedures\ElettraSPEM\" directory. If it is necessary remove "-main" form the name or remove additional folder structure that might be created during unpacking.
+4. Create an alias/shortcut of Menu_SPEM.ipf file and paste it in Igor Procedures directory (for example):
 ```
 C:\Users\user.name\Documents\WaveMetrics\Igor Pro 9 User Files\Igor Procedures
 ```
-4. After launching Igor Pro the SPEM procedures could be loaded using "Menu -> Data -> Load SPEM"
+5. After launching Igor Pro the SPEM procedures could be loaded using "Menu -> Data -> Load SPEM"
 
 ### HDF5 library on Igor Pro
 ElettraSPEM procedures require hdf5 libraries. On Igor Pro 8 those libraries should be already present or if no, follow the instruction included at at the end of this README file.
